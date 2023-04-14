@@ -1,0 +1,69 @@
+{
+  "name": "apollo-boilerplate",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec babel-node ./server",
+    "build": "babel src --out-dir dist",
+    "serve": "node dist/index.js",
+    "migrate": "cd server && sequelize db:migrate",
+    "migrate-bus": "cd server && sequelize model:generate --name Bus --attributes bus_id:string,passenger_count:string,coordinates:string,bus_name:string,departure:string,arrival:string",
+    "migrate:undo": "cd server && sequelize db:migrate:undo:all",
+    "seed": "cd server && sequelize db:seed:all",
+    "seed:undo": "cd server && sequelize db:seed:undo:all",
+    "setup": "cd server && NODE_ENV=test sequelize sequelize db:migrate",
+    "pretest": "cd server && NODE_ENV=test sequelize db:migrate",
+    "test": "NODE_ENV=test jest --colors --detectOpenHandles --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "posttest": "cd server && NODE_ENV=test sequelize db:migrate:undo:all"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.4.3",
+    "and": "^0.0.3",
+    "apollo-server": "^2.4.8",
+    "apollo-server-core": "^2.4.8",
+    "apollo-server-express": "^2.4.8",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.14.0",
+    "dependencies": "^0.0.1",
+    "dotenv": "^7.0.0",
+    "dotenv-safe": "^6.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "express": "^4.16.4",
+    "graphql": "^14.2.1",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-ws": "^5.12.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "nodemon": "^1.18.11",
+    "pg": "^8.10.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.31.0",
+    "sequelize-cli": "^6.6.0",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.4.0",
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "apollo-server-testing": "^2.4.8",
+    "coveralls": "^3.0.3",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.1",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "faker": "^4.1.0",
+    "jest": "^24.7.1",
+    "prettier": "1.17.0"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/server/__tests__/base/"
+    ]
+  }
+}
