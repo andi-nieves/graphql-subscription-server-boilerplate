@@ -15,7 +15,6 @@ const userResolvers = {
   Mutation: {
     createBus: async (root, { newBus }, { models: { Bus } }) => {
       try {
-        console.log('pai', newBus)
         pubsub.publish(BUS_ADDED, { bus: newBus });
         return Bus.create(newBus);
       } catch (error) {
