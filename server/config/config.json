@@ -1,9 +1,9 @@
 
 {
   "development": {
-  "username": "bus",
-  "password": "P@55w0rd",
-  "database": "bus",
+  "username": "postgres",
+  "password": null,
+  "database": "bus_tracker",
   "host": "127.0.0.1",
   "dialect": "postgres",
   "dialectOptions": {
