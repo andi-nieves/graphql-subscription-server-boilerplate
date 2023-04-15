@@ -15,6 +15,7 @@ const userResolvers = {
   Mutation: {
     createBus: async (root, { newBus }, { models: { Bus } }) => {
       try {
+        console.log('pai', newBus)
         pubsub.publish(BUS_ADDED, { bus: newBus });
         return Bus.create(newBus);
       } catch (error) {
@@ -30,16 +31,16 @@ const userResolvers = {
     //     id,
     //   },
     // }).then(([rowsUpdate, [updated]]) => (rowsUpdate ? updated.dataValues : {})),
-    // deleteUser: async (root, { id }, { models: { User }, authScope }) => {
-    //   if (authScope.user === null || id !== authScope.user.id) {
-    //     throw new Error('You cannot delete this user account!');
-    //   }
-    //   User.destroy({
-    //     where: {
-    //       id,
-    //     },
-    //   });
-    // },
+    deleteBus: async (root, { bus_id }, { models: { Bus } }) => {
+      const result = await Bus.destroy({
+        where: {
+          bus_id,
+        },
+      });
+      return {
+        response: result === 0 ? "No record found" : `${bus_id} successfully deleted`
+      }
+    },
   },
 
 };

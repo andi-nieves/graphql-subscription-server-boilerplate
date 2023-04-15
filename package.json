@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec babel-node ./server",
+    "start": "env TZ='Asia/Singapore' nodemon --exec babel-node ./server",
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
     "migrate": "cd server && sequelize db:migrate",

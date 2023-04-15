@@ -11,7 +11,7 @@ module.exports = gql`
     bus_name: String!
     departure: String!
     arrival: String!
-    createdAt: String
+    createdAt: Date @date(defaultFormat: "MM-DD-YYYY hh:mm A")
   }
 
   input busInput {
