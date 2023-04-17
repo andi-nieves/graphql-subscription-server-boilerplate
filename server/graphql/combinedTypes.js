@@ -1,6 +1,7 @@
 // @flow
 import { gql } from 'apollo-server-express';
 import busTypes from './bus/types';
+import coordinatesTypes from './coordinates/types';
 
 
 const queryTypes = gql`
@@ -20,6 +21,6 @@ const queryTypes = gql`
   }
 `;
 
-const combinedTypes = [busTypes, queryTypes];
+const combinedTypes = [busTypes, queryTypes, coordinatesTypes];
 
 export default combinedTypes;

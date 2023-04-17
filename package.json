@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "env TZ='Asia/Singapore' nodemon --exec babel-node ./server",
+    "start": "nodemon --exec babel-node ./server",
     "build": "babel src --out-dir dist",
     "serve": "node dist/index.js",
     "migrate": "cd server && sequelize db:migrate",
@@ -15,7 +15,8 @@
     "setup": "cd server && NODE_ENV=test sequelize sequelize db:migrate",
     "pretest": "cd server && NODE_ENV=test sequelize db:migrate",
     "test": "NODE_ENV=test jest --colors --detectOpenHandles --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "posttest": "cd server && NODE_ENV=test sequelize db:migrate:undo:all"
+    "posttest": "cd server && NODE_ENV=test sequelize db:migrate:undo:all",
+    "forceMigrate": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",

@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Buses', {
+    await queryInterface.createTable('Coordinates', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,18 +10,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       bus_id: {
-        type: Sequelize.STRING,
-      },
-      passenger_count: {
         type: Sequelize.STRING
       },
-      bus_name: {
+      latitude: {
         type: Sequelize.STRING
       },
-      departure: {
-        type: Sequelize.STRING
-      },
-      arrival: {
+      longitude: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -35,6 +29,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropAllTables()
+    await queryInterface.dropTable('Coordinates');
   }
 };

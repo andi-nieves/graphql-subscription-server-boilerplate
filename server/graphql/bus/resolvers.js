@@ -15,12 +15,15 @@ const userResolvers = {
   Mutation: {
     createBus: async (root, { newBus }, { models: { Bus } }) => {
       try {
+        const x = await Bus.findOne({ where: { bus_id: newBus.bus_id }})
+        if (x) {
+          throw new Error("Bus ID already added")
+        }
         pubsub.publish(BUS_ADDED, { bus: newBus });
         return Bus.create(newBus);
       } catch (error) {
-        console.log('err', error.message);
+        return error
       }
-      return newBus;
     },
     // updateUser: async (root, { id, name }, { models: { User } }) => User.update({
     //   name,

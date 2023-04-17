@@ -5,19 +5,17 @@ module.exports = gql`
     bus: Bus!
   } 
   type Bus {
-    bus_id: String!
-    passenger_count: Int!
-    coordinates: String!
-    bus_name: String!
-    departure: String!
-    arrival: String!
-    createdAt: Date @date(defaultFormat: "MM-DD-YYYY hh:mm A")
+    bus_id: String
+    passenger_count: Int
+    bus_name: String
+    departure: String
+    arrival: String
+    createdAt: String
   }
 
   input busInput {
     bus_id: String!
     passenger_count: Int!
-    coordinates: String!
     bus_name: String!
     departure: String!
     arrival: String!
