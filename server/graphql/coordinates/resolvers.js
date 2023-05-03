@@ -3,14 +3,14 @@ import { pubsub } from '../../constants';
 const SUBSCRIPTION_KEY = 'COORDINATES_ADDED';
 
 const resolvers = {
-  CoordinatesSubscription: {
+  Subscription: {
     coordinates: {
-      subscribe: () => pubsub.asyncIterator([SUBSCRIPTION_KEY]),
+      subscribe: async () => pubsub.asyncIterator([SUBSCRIPTION_KEY]),
     },
   },
   Query: {
     // coordinates: async (root, args, { models: { Coordinates } }) => Coordinates.findAll(),
-    coordinates: async (root, { bus_id }, { models: { Coordinates } }) => await Coordinates.findAll({ where: { bus_id } }),
+    coordinates: async (root, { bus_id }, { models: { Coordinates } }) => await Coordinates.findAll({ where: { bus_id }, order: [['createdAt', 'DESC']] }),
   },
   Mutation: {
     addCoordinates: async (root, { coordinates }, { models: { Coordinates, Bus } }) => {

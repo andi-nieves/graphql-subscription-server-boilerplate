@@ -4,6 +4,9 @@ module.exports = gql`
   type Subscription {
     bus: Bus!
   } 
+  extend type Subscription {
+    getBus(bus_id: String!): Bus!
+  } 
   type Bus {
     bus_id: String
     passenger_count: Int
@@ -11,6 +14,7 @@ module.exports = gql`
     departure: String
     arrival: String
     createdAt: String
+    updatedAt: String
   }
 
   input busInput {
@@ -25,12 +29,14 @@ module.exports = gql`
     bus(bus_id: String!): Bus!
     allBus: [Bus!]
   }
+
   type DeleteRes{
     response:String!
   }
+
   extend type Mutation {
     createBus(newBus: busInput): Bus!
     deleteBus(bus_id: String!): DeleteRes!
-    updateBus(bus: busInput): Bus!
+    updateBus(bus_id: String!, passenger_count: Int!): Bus!
   }
 `;

@@ -1,10 +1,11 @@
 import { gql } from 'apollo-server-express';
 
 module.exports = gql`
-  type CoordinatesSubscription {
-    coordinates: Coordinates!
+  extend type Subscription {
+    coordinates(bus_id: String!): Coordinates!
   } 
   type Coordinates {
+    id: ID!
     bus_id: String!
     latitude: String!
     longitude: String!
