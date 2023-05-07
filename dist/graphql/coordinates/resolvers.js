@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 var _constants = require("../../constants");
 var SUBSCRIPTION_KEY = 'COORDINATES_ADDED';
@@ -65,28 +66,63 @@ var resolvers = {
   Mutation: {
     addCoordinates: function () {
       var _addCoordinates = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(root, _ref3, _ref4) {
-        var coordinates, _ref4$models, Coordinates, Bus, details;
+        var coordinates, Coordinates, latitude, longitude, bus_id, count, details, _details;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
               coordinates = _ref3.coordinates;
-              _ref4$models = _ref4.models, Coordinates = _ref4$models.Coordinates, Bus = _ref4$models.Bus;
-              console.log(">>", coordinates);
-              _context3.prev = 3;
+              Coordinates = _ref4.models.Coordinates;
+              _context3.prev = 2;
+              latitude = coordinates.latitude, longitude = coordinates.longitude, bus_id = coordinates.bus_id;
+              _context3.next = 6;
+              return Coordinates.findAll({
+                where: {
+                  bus_id: bus_id
+                }
+              });
+            case 6:
+              count = _context3.sent;
+              if (!(count.length === 0)) {
+                _context3.next = 13;
+                break;
+              }
               details = Coordinates.create(coordinates);
               _constants.pubsub.publish(SUBSCRIPTION_KEY, {
                 coordinates: details
               });
               return _context3.abrupt("return", details);
-            case 9:
-              _context3.prev = 9;
-              _context3.t0 = _context3["catch"](3);
+            case 13:
+              _context3.next = 15;
+              return Coordinates.update({
+                latitude: latitude,
+                longitude: longitude
+              }, {
+                returning: true,
+                where: {
+                  bus_id: bus_id
+                }
+              }).then(function (_ref5) {
+                var _ref6 = (0, _slicedToArray2["default"])(_ref5, 2),
+                  rowsUpdate = _ref6[0],
+                  _ref6$ = (0, _slicedToArray2["default"])(_ref6[1], 1),
+                  updated = _ref6$[0];
+                return rowsUpdate ? updated.dataValues : {};
+              });
+            case 15:
+              _details = _context3.sent;
+              return _context3.abrupt("return", _details);
+            case 17:
+              _context3.next = 22;
+              break;
+            case 19:
+              _context3.prev = 19;
+              _context3.t0 = _context3["catch"](2);
               console.log('err', _context3.t0);
-            case 12:
+            case 22:
             case "end":
               return _context3.stop();
           }
-        }, _callee3, null, [[3, 9]]);
+        }, _callee3, null, [[2, 19]]);
       }));
       function addCoordinates(_x4, _x5, _x6) {
         return _addCoordinates.apply(this, arguments);
@@ -94,13 +130,13 @@ var resolvers = {
       return addCoordinates;
     }(),
     deleteCoordinates: function () {
-      var _deleteCoordinates = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(root, _ref5, _ref6) {
+      var _deleteCoordinates = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(root, _ref7, _ref8) {
         var bus_id, Coordinates, result;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
-              bus_id = _ref5.bus_id;
-              Coordinates = _ref6.models.Coordinates;
+              bus_id = _ref7.bus_id;
+              Coordinates = _ref8.models.Coordinates;
               _context4.next = 4;
               return Coordinates.destroy({
                 where: {
