@@ -19,7 +19,7 @@ module.exports = gql`
 
   input busInput {
     bus_id: String!
-    passenger_count: Int!
+    passenger_count: Int
     bus_name: String!
     departure: String!
     arrival: String!
