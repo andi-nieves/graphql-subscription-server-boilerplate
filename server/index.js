@@ -39,7 +39,7 @@ const server = new ApolloServer({
   subscriptions: {
     onConnect: () => console.log('Connected to websocket....../n'),
   },
-  tracing: true,
+  tracing: false,
 });
 
 

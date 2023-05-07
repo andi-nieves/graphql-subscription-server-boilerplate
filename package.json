@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec babel-node ./server",
-    "build": "babel src --out-dir dist",
+    "build": "babel server --out-dir dist",
     "serve": "node dist/index.js",
     "migrate": "cd server && sequelize db:migrate",
     "migrate-bus": "cd server && sequelize model:generate --name Bus --attributes bus_id:string,passenger_count:string,coordinates:string,bus_name:string,departure:string,arrival:string",
