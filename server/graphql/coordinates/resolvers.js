@@ -13,12 +13,23 @@ const resolvers = {
     coordinates: async (root, { bus_id }, { models: { Coordinates } }) => await Coordinates.findAll({ where: { bus_id }, order: [['createdAt', 'DESC']] }),
   },
   Mutation: {
-    addCoordinates: async (root, { coordinates }, { models: { Coordinates, Bus } }) => {
-      console.log(">>", coordinates)
+    addCoordinates: async (root, { coordinates }, { models: { Coordinates } }) => {
       try {
-        const details = Coordinates.create(coordinates);
-        pubsub.publish(SUBSCRIPTION_KEY, { coordinates: details });
-        return  details
+        const { latitude, longitude, bus_id } = coordinates
+        const count = await Coordinates.findAll({ where: { bus_id }})
+        if (count.length === 0) {
+            const details = Coordinates.create(coordinates);
+            pubsub.publish(SUBSCRIPTION_KEY, { coordinates: details });
+            return  details
+        }  else {
+            const details = await Coordinates.update(
+              { latitude, longitude },
+              { returning: true, where: { bus_id } },
+            ).then(([rowsUpdate, [updated]]) =>
+              rowsUpdate ? updated.dataValues : {},
+            );
+            return details
+        }
       } catch (error) {
         console.log('err', error);
       }
