@@ -17,19 +17,19 @@ const resolvers = {
       try {
         const { latitude, longitude, bus_id } = coordinates
         const count = await Coordinates.findAll({ where: { bus_id }})
+        let details = {}
         if (count.length === 0) {
-            const details = Coordinates.create(coordinates);
-            pubsub.publish(SUBSCRIPTION_KEY, { coordinates: details });
-            return  details
+            details = Coordinates.create(coordinates);
         }  else {
-            const details = await Coordinates.update(
+            details = await Coordinates.update(
               { latitude, longitude },
               { returning: true, where: { bus_id } },
             ).then(([rowsUpdate, [updated]]) =>
               rowsUpdate ? updated.dataValues : {},
             );
-            return details
         }
+	      pubsub.publish(SUBSCRIPTION_KEY, { coordinates: details });
+        return details
       } catch (error) {
         console.log('err', error);
       }

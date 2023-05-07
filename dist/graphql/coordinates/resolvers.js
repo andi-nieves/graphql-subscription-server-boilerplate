@@ -66,7 +66,7 @@ var resolvers = {
   Mutation: {
     addCoordinates: function () {
       var _addCoordinates = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(root, _ref3, _ref4) {
-        var coordinates, Coordinates, latitude, longitude, bus_id, count, details, _details;
+        var coordinates, Coordinates, latitude, longitude, bus_id, count, details;
         return _regenerator["default"].wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
@@ -82,17 +82,16 @@ var resolvers = {
               });
             case 6:
               count = _context3.sent;
+              details = {};
               if (!(count.length === 0)) {
-                _context3.next = 13;
+                _context3.next = 12;
                 break;
               }
               details = Coordinates.create(coordinates);
-              _constants.pubsub.publish(SUBSCRIPTION_KEY, {
-                coordinates: details
-              });
-              return _context3.abrupt("return", details);
-            case 13:
               _context3.next = 15;
+              break;
+            case 12:
+              _context3.next = 14;
               return Coordinates.update({
                 latitude: latitude,
                 longitude: longitude
@@ -108,12 +107,13 @@ var resolvers = {
                   updated = _ref6$[0];
                 return rowsUpdate ? updated.dataValues : {};
               });
+            case 14:
+              details = _context3.sent;
             case 15:
-              _details = _context3.sent;
-              return _context3.abrupt("return", _details);
-            case 17:
-              _context3.next = 22;
-              break;
+              _constants.pubsub.publish(SUBSCRIPTION_KEY, {
+                coordinates: details
+              });
+              return _context3.abrupt("return", details);
             case 19:
               _context3.prev = 19;
               _context3.t0 = _context3["catch"](2);
