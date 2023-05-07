@@ -63,7 +63,7 @@ var server = new _apolloServerExpress.ApolloServer({
       return console.log('Connected to websocket....../n');
     }
   },
-  tracing: true
+  tracing: false
 });
 var app = (0, _express["default"])();
 server.applyMiddleware({

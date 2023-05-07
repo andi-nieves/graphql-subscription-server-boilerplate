@@ -21,7 +21,11 @@ module.exports = gql`
   extend type Query {
     coordinates(bus_id: String!): [Coordinates]!
   }
+  type DeleteCoordinates{
+    response:String!
+  }
   extend type Mutation {
     addCoordinates(coordinates: coordinateInput): Coordinates!
+    deleteCoordinates(bus_id: String!): DeleteCoordinates!
   }
 `;

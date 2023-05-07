@@ -23,6 +23,17 @@ const resolvers = {
         console.log('err', error);
       }
     },
+    deleteCoordinates: async (root, { bus_id }, { models: { Coordinates } }) => {
+      const result = await Coordinates.destroy({
+        where: {
+          bus_id,
+        },
+      });
+      return {
+        response:
+          result === 0 ? 'No record found' : `${bus_id} successfully deleted`,
+      };
+    },
   },
 
 };
