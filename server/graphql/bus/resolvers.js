@@ -12,7 +12,7 @@ const saveImage = (image, name) => {
       console.log(err)
     } else {
       // console.log('im', image)
-      image.writeAsync(`images/${name}.png`)
+      image.write(`images/${name}.png`)
     }
   })
 }

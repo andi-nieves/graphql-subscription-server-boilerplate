@@ -46,8 +46,9 @@ const server = new ApolloServer({
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, 'server')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, '../images')));
+app.use('/images', express.static(path.join(__dirname, '../images')));
+// app.use('/images', express.static(__dirname + "/images"));
 
 app.use(express.json({limit: '25mb'}));
 app.use(express.urlencoded({limit: '25mb', extended: true }));
