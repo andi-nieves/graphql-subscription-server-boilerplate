@@ -9,8 +9,21 @@ var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"))
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 var _constants = require("../../constants");
+var _jimp = _interopRequireDefault(require("jimp"));
+var _fs = _interopRequireDefault(require("fs"));
 var BUS_ADDED = 'bus';
 var BUS_UPDATED = 'bus_updated';
+var saveImage = function saveImage(image, name) {
+  if (!image) return;
+  _jimp["default"].read(Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64'), function (err, image) {
+    if (err) {
+      console.log(err);
+    } else {
+      // console.log('im', image)
+      image.writeAsync("images/".concat(name, ".png"));
+    }
+  });
+};
 var userResolvers = {
   Subscription: {
     bus: {
@@ -89,7 +102,7 @@ var userResolvers = {
   Mutation: {
     createBus: function () {
       var _createBus = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(root, _ref4, _ref5) {
-        var newBus, Bus, x;
+        var newBus, Bus, x, busImageUrl, driverImageUrl, conductorImageUrl, details;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
@@ -110,19 +123,32 @@ var userResolvers = {
               }
               throw new Error('Bus ID already added');
             case 8:
+              busImageUrl = newBus.bus_image;
+              delete newBus.bus_image;
+              driverImageUrl = newBus.driver_image;
+              delete newBus.driver_image;
+              conductorImageUrl = newBus.conductor_image;
+              delete newBus.conductor_image;
+              _context4.next = 16;
+              return Bus.create(newBus);
+            case 16:
+              details = _context4.sent;
               _constants.pubsub.publish(BUS_ADDED, {
-                bus: newBus
+                bus: details
               });
-              return _context4.abrupt("return", Bus.create(newBus));
-            case 12:
-              _context4.prev = 12;
+              saveImage(busImageUrl, "bus-".concat(details.dataValues.id));
+              saveImage(driverImageUrl, "driver-".concat(details.dataValues.id));
+              saveImage(conductorImageUrl, "conductor-".concat(details.dataValues.id));
+              return _context4.abrupt("return", details);
+            case 24:
+              _context4.prev = 24;
               _context4.t0 = _context4["catch"](2);
               return _context4.abrupt("return", _context4.t0);
-            case 15:
+            case 27:
             case "end":
               return _context4.stop();
           }
-        }, _callee4, null, [[2, 12]]);
+        }, _callee4, null, [[2, 24]]);
       }));
       function createBus(_x7, _x8, _x9) {
         return _createBus.apply(this, arguments);
@@ -184,32 +210,84 @@ var userResolvers = {
       }
       return updateBus;
     }(),
-    deleteBus: function () {
-      var _deleteBus = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(root, _ref10, _ref11) {
-        var bus_id, Bus, result;
+    updateSelected: function () {
+      var _updateSelected = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(root, _ref10, _ref11) {
+        var bus, id, Bus, busImageUrl, driverImageUrl, conductorImageUrl, details;
         return _regenerator["default"].wrap(function _callee6$(_context6) {
           while (1) switch (_context6.prev = _context6.next) {
             case 0:
-              bus_id = _ref10.bus_id;
+              bus = _ref10.bus, id = _ref10.id;
               Bus = _ref11.models.Bus;
-              _context6.next = 4;
+              _context6.prev = 2;
+              busImageUrl = bus.bus_image;
+              delete bus.bus_image;
+              driverImageUrl = bus.driver_image;
+              delete bus.driver_image;
+              conductorImageUrl = bus.conductor_image;
+              delete bus.conductor_image;
+              _context6.next = 11;
+              return Bus.update(bus, {
+                returning: true,
+                where: {
+                  id: id
+                }
+              }).then(function (_ref12) {
+                var _ref13 = (0, _slicedToArray2["default"])(_ref12, 2),
+                  rowsUpdate = _ref13[0],
+                  _ref13$ = (0, _slicedToArray2["default"])(_ref13[1], 1),
+                  updated = _ref13$[0];
+                return rowsUpdate ? updated.dataValues : {};
+              });
+            case 11:
+              details = _context6.sent;
+              _constants.pubsub.publish(BUS_UPDATED, {
+                getBus: details
+              });
+              saveImage(busImageUrl, "bus-".concat(id));
+              saveImage(driverImageUrl, "driver-".concat(id));
+              saveImage(conductorImageUrl, "conductor-".concat(id));
+              return _context6.abrupt("return", details);
+            case 19:
+              _context6.prev = 19;
+              _context6.t0 = _context6["catch"](2);
+              return _context6.abrupt("return", _context6.t0);
+            case 22:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6, null, [[2, 19]]);
+      }));
+      function updateSelected(_x13, _x14, _x15) {
+        return _updateSelected.apply(this, arguments);
+      }
+      return updateSelected;
+    }(),
+    deleteBus: function () {
+      var _deleteBus = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(root, _ref14, _ref15) {
+        var bus_id, Bus, result;
+        return _regenerator["default"].wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              bus_id = _ref14.bus_id;
+              Bus = _ref15.models.Bus;
+              _context7.next = 4;
               return Bus.destroy({
                 where: {
                   bus_id: bus_id
                 }
               });
             case 4:
-              result = _context6.sent;
-              return _context6.abrupt("return", {
+              result = _context7.sent;
+              return _context7.abrupt("return", {
                 response: result === 0 ? 'No record found' : "".concat(bus_id, " successfully deleted")
               });
             case 6:
             case "end":
-              return _context6.stop();
+              return _context7.stop();
           }
-        }, _callee6);
+        }, _callee7);
       }));
-      function deleteBus(_x13, _x14, _x15) {
+      function deleteBus(_x16, _x17, _x18) {
         return _deleteBus.apply(this, arguments);
       }
       return deleteBus;
