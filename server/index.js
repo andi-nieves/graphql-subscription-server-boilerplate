@@ -1,4 +1,5 @@
 import express from 'express';
+const path = require('path');
 import http from 'http';
 import { ApolloServer } from 'apollo-server-express';
 import typeDefs from './graphql/combinedTypes';
@@ -45,15 +46,22 @@ const server = new ApolloServer({
 
 const app = express();
 
+app.use(express.static(path.join(__dirname, 'server')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+app.use(express.json({limit: '25mb'}));
+app.use(express.urlencoded({limit: '25mb', extended: true }));
+
 server.applyMiddleware({ app });
+
 
 const httpServer = http.createServer(app);
 
 server.installSubscriptionHandlers(httpServer);
 
 models.sequelize.authenticate();
-
 models.sequelize.sync();
+// models.sequelize.sync({ force: true });
 
 httpServer.listen(port, () => {
   console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);

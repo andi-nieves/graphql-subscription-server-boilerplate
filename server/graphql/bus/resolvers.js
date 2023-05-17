@@ -1,7 +1,22 @@
 import { pubsub } from '../../constants';
+import Jimp from "jimp";
+import fs from 'fs';
 
 const BUS_ADDED = 'bus';
 const BUS_UPDATED = 'bus_updated';
+
+const saveImage = (image, name) => {
+  if (!image) return 
+  Jimp.read(Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64'), function (err, image) {
+    if (err) {
+      console.log(err)
+    } else {
+      // console.log('im', image)
+      image.writeAsync(`images/${name}.png`)
+    }
+  })
+}
+
 const userResolvers = {
   Subscription: {
     bus: {
@@ -23,8 +38,19 @@ const userResolvers = {
         if (x) {
           throw new Error('Bus ID already added');
         }
-        pubsub.publish(BUS_ADDED, { bus: newBus });
-        return Bus.create(newBus);
+        const busImageUrl = newBus.bus_image
+        delete newBus.bus_image
+        const driverImageUrl = newBus.driver_image
+        delete newBus.driver_image
+        const conductorImageUrl = newBus.conductor_image
+        delete newBus.conductor_image
+        
+        const details = await Bus.create(newBus)
+        pubsub.publish(BUS_ADDED, { bus: details })
+        saveImage(busImageUrl, `bus-${details.dataValues.id}`)
+        saveImage(driverImageUrl, `driver-${details.dataValues.id}`)
+        saveImage(conductorImageUrl, `conductor-${details.dataValues.id}`)
+        return details
       } catch (error) {
         return error;
       }
@@ -46,6 +72,33 @@ const userResolvers = {
         );
         pubsub.publish(BUS_UPDATED, { getBus: bus });
         return bus
+      } catch (error) {
+        return error;
+      }
+    },
+    updateSelected: async (
+      root,
+      { bus, id },
+      { models: { Bus } },
+    ) => {
+      try {
+        const busImageUrl = bus.bus_image
+        delete bus.bus_image
+        const driverImageUrl = bus.driver_image
+        delete bus.driver_image
+        const conductorImageUrl = bus.conductor_image
+        delete bus.conductor_image
+
+        const details = await Bus.update(bus, { returning: true, where: { id } },
+        ).then(([rowsUpdate, [updated]]) =>
+          rowsUpdate ? updated.dataValues : {},
+        );
+        
+        pubsub.publish(BUS_UPDATED, { getBus: details });
+        saveImage(busImageUrl, `bus-${id}`)
+        saveImage(driverImageUrl, `driver-${id}`)
+        saveImage(conductorImageUrl, `conductor-${id}`)
+        return details
       } catch (error) {
         return error;
       }

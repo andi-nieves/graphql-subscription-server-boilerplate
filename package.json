@@ -17,7 +17,7 @@
     "pretest": "cd server && NODE_ENV=test sequelize db:migrate",
     "test": "NODE_ENV=test jest --colors --detectOpenHandles --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "posttest": "cd server && NODE_ENV=test sequelize db:migrate:undo:all",
-    "forceMigrate": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate"
+    "forceMigrate": "cd server && npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.3",
@@ -35,6 +35,7 @@
     "graphql": "^14.2.1",
     "graphql-iso-date": "^3.6.1",
     "graphql-ws": "^5.12.1",
+    "jimp": "^0.22.8",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "nodemon": "^1.18.11",

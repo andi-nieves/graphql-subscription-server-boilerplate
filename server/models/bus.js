@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     bus_name: DataTypes.STRING,
     departure: DataTypes.STRING,
     arrival: DataTypes.STRING,
+    driver_name: DataTypes.STRING,
+    driver_contact: DataTypes.STRING,
+    conductor_name: DataTypes.STRING,
+    conductor_contact: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Bus',
