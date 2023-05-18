@@ -4,6 +4,7 @@ import fs from 'fs';
 
 const BUS_ADDED = 'bus';
 const BUS_UPDATED = 'bus_updated';
+const BUS_DELETED = 'bus_deleted';
 
 const saveImage = (image, name) => {
   if (!image) return 
@@ -24,6 +25,9 @@ const userResolvers = {
     },
     getBus: {
       subscribe: async () => pubsub.asyncIterator([BUS_UPDATED])
+    },
+    deleteBus: {
+      subscribe: async () => pubsub.asyncIterator([BUS_DELETED])
     }
   },
   Query: {
@@ -109,6 +113,7 @@ const userResolvers = {
           bus_id,
         },
       });
+      pubsub.publish(BUS_DELETED, { deleteBus: {bus_id} });
       return {
         response:
           result === 0 ? 'No record found' : `${bus_id} successfully deleted`,

@@ -7,6 +7,12 @@ module.exports = gql`
   extend type Subscription {
     getBus(bus_id: String!): Bus!
   } 
+  extend type Subscription {
+    deleteBus: DeleteSub
+  } 
+  type DeleteSub{
+    bus_id:String!
+  }
   type Bus {
     id: Int
     bus_id: String
