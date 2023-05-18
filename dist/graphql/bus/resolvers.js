@@ -20,7 +20,7 @@ var saveImage = function saveImage(image, name) {
       console.log(err);
     } else {
       // console.log('im', image)
-      image.writeAsync("images/".concat(name, ".png"));
+      image.write("images/".concat(name, ".png"));
     }
   });
 };

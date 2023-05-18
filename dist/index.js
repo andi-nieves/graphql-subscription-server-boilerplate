@@ -67,8 +67,10 @@ var server = new _apolloServerExpress.ApolloServer({
   tracing: false
 });
 var app = (0, _express["default"])();
-app.use(_express["default"]["static"](path.join(__dirname, 'server')));
-app.use('/images', _express["default"]["static"](path.join(__dirname, 'images')));
+app.use(_express["default"]["static"](path.join(__dirname, '../images')));
+app.use('/images', _express["default"]["static"](path.join(__dirname, '../images')));
+// app.use('/images', express.static(__dirname + "/images"));
+
 app.use(_express["default"].json({
   limit: '25mb'
 }));
