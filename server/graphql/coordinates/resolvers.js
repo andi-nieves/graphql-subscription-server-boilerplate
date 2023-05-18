@@ -15,19 +15,26 @@ const resolvers = {
   Mutation: {
     addCoordinates: async (root, { coordinates }, { models: { Coordinates } }) => {
       try {
-        const { latitude, longitude, bus_id } = coordinates
-        const count = await Coordinates.findAll({ where: { bus_id }})
-        let details = {}
-        if (count.length === 0) {
-            details = Coordinates.create(coordinates);
-        }  else {
-            details = await Coordinates.update(
-              { latitude, longitude },
-              { returning: true, where: { bus_id } },
-            ).then(([rowsUpdate, [updated]]) =>
-              rowsUpdate ? updated.dataValues : {},
-            );
-        }
+        const { bus_id } = coordinates
+        await Coordinates.destroy({
+          where: {
+            bus_id,
+          },
+        });
+        let details = await Coordinates.create(coordinates);
+        // const count = await Coordinates.findAll({ where: { bus_id }})
+        // let details = {}
+        // console.log('count', count, bus_id)
+        // if (count.length === 0) {
+        //     details = await Coordinates.create(coordinates);
+        // }  else {
+        //     details = await Coordinates.update(
+        //       { latitude, longitude },
+        //       { returning: true, where: { bus_id } },
+        //     ).then(([rowsUpdate, [updated]]) =>
+        //       rowsUpdate ? updated.dataValues : {},
+        //     );
+        // }
 	      pubsub.publish(SUBSCRIPTION_KEY, { coordinates: details });
         return details
       } catch (error) {
