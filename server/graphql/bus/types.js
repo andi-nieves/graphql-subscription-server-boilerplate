@@ -18,8 +18,10 @@ module.exports = gql`
     bus_id: String
     passenger_count: Int
     bus_name: String
+    departure_time: String
     departure: String
     arrival: String
+    arrival_time: String
     createdAt: String
     updatedAt: String
     driver_name: String
@@ -32,8 +34,10 @@ module.exports = gql`
     bus_id: String!
     passenger_count: Int
     bus_name: String!
+    departure_time: String!
     departure: String!
     arrival: String!
+    arrival_time: String!
     bus_image: Upload
     driver_image: Upload
     conductor_image: Upload

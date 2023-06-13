@@ -21,7 +21,13 @@ module.exports = {
       departure: {
         type: Sequelize.STRING
       },
+      departure_time: {
+        type: Sequelize.STRING
+      },
       arrival: {
+        type: Sequelize.STRING
+      },
+      arrival_time: {
         type: Sequelize.STRING
       },
       createdAt: {
